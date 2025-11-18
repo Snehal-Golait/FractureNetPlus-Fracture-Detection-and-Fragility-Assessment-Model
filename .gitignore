@@ -1,0 +1,35 @@
+# Virtual environment
+venv/
+.env/
+.venv/
+
+# Dataset and large files
+Datasets/
+data/
+*.zip
+
+# Model files
+*.h5
+*.hdf5
+*.keras
+*.pt
+*.pth
+
+# System & temporary files
+__pycache__/
+*.pyc
+.DS_Store
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Uploaded / temp files
+uploads/
+uploaded_*.png
+
+# VSCode
+.vscode/
+
+# Python bytecode
+*.pyo
+*.pyd

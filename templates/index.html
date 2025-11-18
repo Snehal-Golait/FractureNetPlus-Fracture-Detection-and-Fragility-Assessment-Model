@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Fracture & Fragility Detection</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #0F172A;
+			color: #E2E8F0;
+			text-align: center;
+			padding: 30px;
+		}
+		.container {
+			width: 420px;
+			margin: auto;
+			padding: 20px;
+			background: #1E293B;
+			border-radius: 12px;
+			box-shadow: 0px 0px 20px #0005;
+		}
+		.dropzone {
+			border: 2px dashed #38BDF8;
+			padding: 30px;
+			border-radius: 12px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+		.dropzone:hover {
+			background: #334155;
+		}
+		#preview {
+			width: 100%;
+			margin-top: 15px;
+			display: none;
+			border-radius: 10px;
+		}
+		.btn {
+			margin-top: 15px;
+			padding: 10px 20px;
+			font-size: 18px;
+			cursor: pointer;
+			background: #38BDF8;
+			border: none;
+			border-radius: 10px;
+			color: #0F172A;
+			font-weight: bold;
+		}
+		.result-box {
+			background: #0f253b;
+			padding: 15px;
+			margin-top: 20px;
+			border-radius: 10px;
+			text-align: left;
+		}
+	</style>
+</head>
+
+<body>
+	<h2>🔍 Fracture + Fragility Detection</h2>
+	<p>Upload X-ray image to analyze bone health</p>
+
+	<div class="container">
+
+		<form id="uploadForm" method="POST" enctype="multipart/form-data">
+			<input type="file" id="fileInput" name="file" accept="image/*" hidden>
+
+			<div class="dropzone" id="dropzone">
+				<h3>📁 Drag & Drop Image Here<br>or Click to Browse</h3>
+			</div>
+
+			<img id="preview">
+
+			<button class="btn" type="submit">Analyze Image</button>
+		</form>
+
+		{% if file %}
+		<div class="result-box">
+			<p><b>📌 File:</b> {{ file}}</p>
+			<p><b>🦴 Fracture Prediction:</b> {{ fracture_label }} ({{ fracture_conf }}%)</p>
+
+            {% if fragility_label %}
+            <p><b>🧪 Fragility Class:</b> {{ fragility_label }}{% if fragility_conf %} ({{ fragility_conf }}%) {% endif %}</p>
+            {% endif %}
+
+		</div>
+		{% endif %}
+	</div>
+
+<script>
+	const dropzone = document.getElementById("dropzone");
+	const fileInput = document.getElementById("fileInput");
+	const preview = document.getElementById("preview");
+
+	dropzone.onclick = () => fileInput.click();
+
+	dropzone.addEventListener("dragover", (e) => {
+		e.preventDefault();
+		dropzone.style.background = "#475569";
+	});
+
+	dropzone.addEventListener("dragleave", () => {
+		dropzone.style.background = "#334155";
+	});
+
+	dropzone.addEventListener("drop", (e) => {
+		e.preventDefault();
+		dropzone.style.background = "#334155";
+		const file = e.dataTransfer.files[0];
+		fileInput.files = e.dataTransfer.files;
+		showPreview(file);
+	});
+
+	fileInput.addEventListener("change", () => {
+		showPreview(fileInput.files[0]);
+	});
+
+	function showPreview(file) {
+		if (!file) return;
+		preview.src = URL.createObjectURL(file);
+		preview.style.display = "block";
+	}
+</script>
+
+</body>
+</html>
